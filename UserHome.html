@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px;
+      margin-left: 400px;
+      margin-right: 400px;
+      padding: 5px;
+      justify-content: center;
+      border: 2px solid #333;
+    }
+
+    #roles,
+    #permissions {
+      margin: 20px;
+      padding: 15px;
+      border: 2px solid #333;
+      border-radius: 3px;
+      background-color: #f8f8f8;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar {
+      overflow: hidden;
+      background-color: #333;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .navbar a {
+      float: left;
+      font-size: 14px;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    .navbar a:hover {
+      background-color: cornflowerblue;
+    }
+
+    h1 {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      margin: 0;
+    }
+  </style>
+  <script src="SecurityManager.js"></script>
+  <script>
+    function Print_Task() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get('id');
+
+      const div1 = document.getElementById('roles');
+      const div2 = document.getElementById('permissions')
+
+      const roles = SecurityManager.GetAllUserRoles()
+      const users = SecurityManager.GetUserById(userId)
+      const Roles_Permissions = SecurityManager.GetAllRolePermissions()
+
+      console.log(Roles_Permissions)
+      console.log(users)
+      console.log(roles)
+      const user_permissions = [];
+
+      for (var i = 0; i < roles.length; i++) {
+        if (roles[i].User == users.name) {
+          const user_role = roles[i].Role;
+          for (var j = 0; j < Roles_Permissions.length; j++) {
+            if (user_role == Roles_Permissions[j].Role) {
+              user_permissions.push(Roles_Permissions[j].Permission)
+            }
+          }
+          const para = document.createElement('p')
+          para.innerText = roles[i].Role
+          div1.appendChild(para);
+
+        }
+
+        console.log(user_permissions)
+
+        for (var k = 0; k < user_permissions.length; k++) {
+          const par = document.createElement('p')
+          par.innerText = user_permissions[k]
+          div2.appendChild(par);
+        }
+      }
+    }
+  </script>
+</head>
+
+<body onload="Print_Task()">
+
+  <div class="navbar">
+    <a href="AdminHome.html">Home</a>
+    <a href="Logout.html">Logout</a>
+  </div>
+  <div class="container">
+    <h1>Welcome User</h1>
+    <h2>Roles</h2>
+    <div id="roles"></div>
+    <h2>Permissions</h2>
+    <div id="permissions"></div>
+
+  </div>
+
+

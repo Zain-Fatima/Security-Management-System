@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+      <script defer src="SecurityManager.js"></script>
+    <style>
+  .login-form {
+        display: inline-block;
+        margin: 0px;
+        border: 1px solid #ccc;
+        padding: 25px;
+        width: 230px;
+      } 
+   body{
+        background-color: #ccc; }
+  
+      .container {
+        margin: 0 auto;
+        max-width: 570px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      
+      h1 {
+        text-align: left;
+        color: #333333;
+      }
+      
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        background-color: offwhite;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float:right;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      .error {
+        color: red;
+      }
+
+      .success {
+        color: green;
+      }
+
+      .form-heading {
+        margin-top: 0;
+        text-align: left;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+      .alert {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+    </style>
+
+<script>
+        
+        function Admin_Validate(event)
+        {
+            event.preventDefault();
+            var name = document.getElementById("admin-username").value;
+            var password = document.getElementById("admin-password").value;
+
+            if (name.trim() === '') {
+                alert("Please enter your username");
+                return;
+            }
+            if (password.trim() === '') {
+                alert("Please enter your password");
+                return;
+            }
+
+            if(SecurityManager.ValidateAdmin(name,password))
+            {
+                window.location.href='home.html'
+            }
+            else{
+                alert("Not Authorized");
+            }
+        }
+
+        function User_Validate(event)
+        {
+            event.preventDefault();
+            var name = document.getElementById("user-username").value;
+            var password = document.getElementById("user-password").value;
+            
+            if (name.trim() === '') {
+                alert("Please enter your username");
+                return;
+            }
+            if (password.trim() === '') {
+                alert("Please enter your password");
+                return;
+            }
+
+            const users = SecurityManager.GetAllUsers();
+            
+            for(var i = 0; i < users.length; i++ )
+            {
+                if(users[i].login === name && users[i].password === password)
+                {
+                    window.location.href = 'UserHome.html?id=' + users[i].ID;
+
+                    return;
+                }
+            }
+            alert("Not Authorized");
+        }
+    </script>
+</head>    
+
+<body>
+<br><br><br>
+    <div class="container">
+	<div class="header">
+		<h1>Security Manager</h1>
+	</div>
+	<div class="login-container">
+		<div class="login-form admin-login">
+			<h2>Admin Login</h2>
+			<form onsubmit="Admin_Validate(event)">
+				<label  for="admin-username">Username:</label>
+				<input  type="text" id="admin-username" name="admin-username" required>
+				<label  for="admin-password">Password:</label>
+				<input  type="password" id="admin-password" name="admin-password" required>
+				<input type="submit" id="Admin-Login" value="Login"  >
+			</form>
+		</div>
+		<div class="login-form user-login">
+			<h2>User Login</h2>
+			<form onsubmit="User_Validate(event)">
+				<label for="user-username">Username:</label>
+				<input type="text" id="user-username" name="user-username" required>
+				<label for="user-password">Password:</label>
+				<input type="password" id="user-password" name="user-password" required>
+				<input type="submit" id="User-Login" value="Login">
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>
